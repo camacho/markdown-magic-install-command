@@ -28,7 +28,6 @@ const config = {
 const markdownPath = path.join(__dirname, 'README.md');
 markdownMagic(markdownPath, config);
 ```
-<!-- AUTO-GENERATED-CONTENT:START (CODE:src=./example.js) -->
 <!-- AUTO-GENERATED-CONTENT:END *-->
 
 ## Usage in markdown
@@ -37,10 +36,10 @@ markdownMagic(markdownPath, config);
 ```sh
 npm install --save-dev markdown-magic-install-command
 ```
-<!-- AUTO-GENERATED-CONTENT:START (INSTALLCMD:flags=["--save-dev"]) -->
 <!-- AUTO-GENERATED-CONTENT:END -->
 
 ## Options
 
 * **flags** (`["--save"]` by default) - any flags to be included (like `-g`)
 * **peers** (`true` by default) - include peer dependencies in install command
+* **pkg** (closest `package.json` by default) - `package.json` path (relative to the Markdown file)

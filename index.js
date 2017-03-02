@@ -19,7 +19,13 @@ function findPkg(dir) {
 module.exports = function INSTALLCMD(content, _options = {}, config) {
   const options = Object.assign({}, defaults, _options);
 
-  const pkgPath = findPkg(config.originalPath);
+  let pkgPath;
+
+  if (options.pkg) {
+    pkgPath = path.resolve(path.dirname(config.originalPath), options.pkg);
+  } else {
+    pkgPath = findPkg(config.originalPath);
+  }
 
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
 
