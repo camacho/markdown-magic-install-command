@@ -32,9 +32,9 @@ markdownMagic(markdownPath, config);
 
 ## Usage in markdown
 
-<!-- AUTO-GENERATED-CONTENT:START (INSTALLCMD:flags=["--save-dev"]) -->
+<!-- AUTO-GENERATED-CONTENT:START (INSTALLCMD:flags=["--save-dev"]&exact=true) -->
 ```sh
-npm install --save-dev markdown-magic-install-command
+npm install --save-dev markdown-magic-install-command@1.2.0
 ```
 <!-- AUTO-GENERATED-CONTENT:END -->
 
@@ -43,3 +43,4 @@ npm install --save-dev markdown-magic-install-command
 * **flags** (`["--save"]` by default) - any flags to be included (like `-g`)
 * **peers** (`true` by default) - include peer dependencies in install command
 * **pkg** (closest `package.json` by default) - `package.json` path (relative to the Markdown file)
+* **exact** (`false` by default) - add the exact version to the install command

@@ -5,6 +5,7 @@ const findup = require('findup');
 const defaults = {
   flags: '["--save"]',
   peers: true,
+  exact: false,
 };
 
 function findPkg(dir) {
@@ -37,10 +38,12 @@ module.exports = function INSTALLCMD(content, _options = {}, config) {
     .join(' ') :
     [];
 
+  const main = `${pkg.name}${options.exact ? `@${pkg.version}` : ''}`;
+
   const install = [
     `npm install`,
     ...JSON.parse(options.flags),
-    pkg.name,
+    main,
     peerDeps,
   ].filter((value) => !!value).join(' ')
 
