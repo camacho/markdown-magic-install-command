@@ -32,11 +32,10 @@ module.exports = function INSTALLCMD(content, _options = {}, config) {
 
   const includePeers = options.peers !== 'false';
 
-  const peerDeps = !!includePeers ?  Object
-    .entries(pkg.peerDependencies || {})
-    .map(args => args.join('@'))
+  const peerDeps = !!includePeers ?  Object.keys(pkg.peerDependencies || {})
+    .map(k => `${k}@${pkg.peerDependencies[k]}`)
     .join(' ') :
-    [];
+    '';
 
   const main = `${pkg.name}${options.exact ? `@${pkg.version}` : ''}`;
 
