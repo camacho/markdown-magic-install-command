@@ -6,6 +6,7 @@ const defaults = {
   flags: '["--save"]',
   peers: true,
   exact: false,
+  client: 'npm'
 };
 
 function findPkg(dir) {
@@ -28,6 +29,13 @@ module.exports = function INSTALLCMD(content, _options = {}, config) {
     pkgPath = findPkg(config.originalPath);
   }
 
+  const rootDir = path.dirname(pkgPath);
+
+  if (!_options.client &&
+    fs.existsSync(path.join(rootDir, 'yarn.lock'))){
+    options.client = 'yarn';
+  }
+
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
 
   const includePeers = options.peers !== 'false';
@@ -40,7 +48,7 @@ module.exports = function INSTALLCMD(content, _options = {}, config) {
   const main = `${pkg.name}${options.exact ? `@${pkg.version}` : ''}`;
 
   const install = [
-    `npm install`,
+    `${ options.client } install`,
     ...JSON.parse(options.flags),
     main,
     peerDeps,

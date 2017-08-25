@@ -4,9 +4,11 @@ Add install command to markdown files via [markdown-magic](https://github.com/Da
 
 ## Install
 
+<!-- AUTO-GENERATED-CONTENT:START (INSTALLCMD:flags=["-D"]&optional=true) -->
+```sh
+yarn install -D markdown-magic-install-command
 ```
-npm i markdown-magic markdown-magic-install-command --save-dev
-```
+<!-- AUTO-GENERATED-CONTENT:END -->
 
 ## Adding the plugin
 
@@ -34,12 +36,12 @@ markdownMagic(markdownPath, config);
 
 <!-- AUTO-GENERATED-CONTENT:START (INSTALLCMD:flags=["--save-dev"]&exact=true) -->
 ```sh
-npm install --save-dev markdown-magic-install-command@1.2.0
+yarn install --save-dev markdown-magic-install-command@1.2.1
 ```
 <!-- AUTO-GENERATED-CONTENT:END -->
 
 ## Options
-
+* **client** (defaults to 'npm' unless `yarn.lock` found) - specify the client for the install command
 * **flags** (`["--save"]` by default) - any flags to be included (like `-g`)
 * **peers** (`true` by default) - include peer dependencies in install command
 * **pkg** (closest `package.json` by default) - `package.json` path (relative to the Markdown file)
