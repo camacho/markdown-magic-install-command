@@ -306,7 +306,7 @@ markdown-link@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/markdown-link/-/markdown-link-0.1.1.tgz#32c5c65199a6457316322d1e4229d13407c8c7cf"
 
-markdown-magic@^0.1.6:
+markdown-magic@^0.1.17:
   version "0.1.17"
   resolved "https://registry.yarnpkg.com/markdown-magic/-/markdown-magic-0.1.17.tgz#963fe3b0dbe8205e72709449a44ad2f4db11ff6e"
   dependencies:

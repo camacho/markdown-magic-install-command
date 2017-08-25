@@ -6,7 +6,7 @@ Add install command to markdown files via [markdown-magic](https://github.com/Da
 
 <!-- AUTO-GENERATED-CONTENT:START (INSTALLCMD:flags=["-D"]&optional=true) -->
 ```sh
-yarn install -D markdown-magic-install-command
+yarn add -D markdown-magic-install-command
 ```
 <!-- AUTO-GENERATED-CONTENT:END -->
 
@@ -36,7 +36,7 @@ markdownMagic(markdownPath, config);
 
 <!-- AUTO-GENERATED-CONTENT:START (INSTALLCMD:flags=["--save-dev"]&exact=true) -->
 ```sh
-yarn install --save-dev markdown-magic-install-command@1.2.1
+yarn add --dev markdown-magic-install-command@1.3.1
 ```
 <!-- AUTO-GENERATED-CONTENT:END -->
 
