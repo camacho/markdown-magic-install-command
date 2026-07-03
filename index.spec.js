@@ -33,4 +33,30 @@ describe('markdown-magic-install-command', () => {
       }),
     ).toBe('```sh\nyarn add --dev yarn-client-fixture\n```');
   });
+
+  it('uses the yarn classic global subcommand for --global', () => {
+    expect(
+      INSTALLCMD({
+        content: 'untouched',
+        options: {
+          pkg: './__fixtures__/yarn-client/package.json',
+          flags: '["--global"]',
+        },
+        srcPath,
+      }),
+    ).toBe('```sh\nyarn global add yarn-client-fixture\n```');
+  });
+
+  it('uses the bun --global flag rather than a global subcommand', () => {
+    expect(
+      INSTALLCMD({
+        content: 'untouched',
+        options: {
+          pkg: './__fixtures__/bun-client/package.json',
+          flags: '["--global"]',
+        },
+        srcPath,
+      }),
+    ).toBe('```sh\nbun add --global bun-client-fixture\n```');
+  });
 });

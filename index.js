@@ -9,7 +9,7 @@ const defaults = {
 };
 
 const installMappings = {
-  '--global': { npm: '--global', yarn: '', pnpm: '--global', bun: '' },
+  '--global': { npm: '--global', yarn: '', pnpm: '--global', bun: '--global' },
   '--save': { npm: '--save', yarn: '', pnpm: '', bun: '' },
   '--save-exact': {
     npm: '--save-exact',
@@ -87,7 +87,7 @@ function buildDeps(pkg, exactFlag, peersFlag) {
 const buildDep = (obj) => (key) => quoteSpacesInDep([key, obj[key]].join('@'));
 
 function buildInstallCmd(client, isGlobal) {
-  return `${client}${isGlobal && ['yarn', 'bun'].includes(client) ? ' global' : ''} add`;
+  return `${client}${isGlobal && client === 'yarn' ? ' global' : ''} add`;
 }
 
 function buildCmdFlags(client, flags) {
@@ -116,7 +116,7 @@ export default function INSTALLCMD({
   const client = options.client || pickClient(path.dirname(pkgPath));
 
   const cmd = filterFalseyAndJoin([
-    buildInstallCmd(client, options.flags.global),
+    buildInstallCmd(client, options.flags.includes('--global')),
     buildCmdFlags(client, options.flags),
     buildDeps(pkg, options.exact, options.peers !== 'false'),
   ]);
