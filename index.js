@@ -8,19 +8,34 @@ const defaults = {
   exact: false,
 };
 
-const npmFlagsToYarn = {
-  '--save': '',
-  '---save-exact': '--exact',
-  '--save-optional': '--optional',
-  '--save-dev': '--dev',
-  '--global': '',
+const installMappings = {
+  '--global': { npm: '--global', yarn: '', pnpm: '--global', bun: '' },
+  '--save': { npm: '--save', yarn: '', pnpm: '', bun: '' },
+  '--save-exact': {
+    npm: '--save-exact',
+    yarn: '--exact',
+    pnpm: '--save-exact',
+    bun: '--exact',
+  },
+  '--save-optional': {
+    npm: '--save-optional',
+    yarn: '--optional',
+    pnpm: '--save-optional',
+    bun: '--optional',
+  },
+  '--save-dev': {
+    npm: '--save-dev',
+    yarn: '--dev',
+    pnpm: '--save-dev',
+    bun: '--dev',
+  },
 };
 
 function quoteSpacesInDep(dep) {
   return dep.includes(' ') ? `"${dep}"` : dep;
 }
 
-function filterAndJoin(array, join = ' ') {
+function filterFalseyAndJoin(array, join = ' ') {
   return array.filter((v) => !!v).join(join);
 }
 
@@ -35,11 +50,29 @@ function findPkg(dir) {
 }
 
 function pickClient(dir) {
-  return existsSync(path.join(dir, 'yarn.lock')) ? 'yarn' : 'npm';
+  if (
+    existsSync(path.join(dir, 'bun.lock')) ||
+    existsSync(path.join(dir, 'bun.lockb'))
+  ) {
+    return 'bun';
+  }
+
+  if (existsSync(path.join(dir, 'pnpm-lock.yaml'))) {
+    return 'pnpm';
+  }
+
+  if (existsSync(path.join(dir, 'yarn.lock'))) {
+    return 'yarn';
+  }
+
+  return 'npm';
 }
 
 function buildDeps(pkg, exactFlag, peersFlag) {
-  const mainDep = filterAndJoin([pkg.name, exactFlag ? pkg.version : ''], '@');
+  const mainDep = filterFalseyAndJoin(
+    [pkg.name, exactFlag ? pkg.version : ''],
+    '@',
+  );
 
   if (!peersFlag) return mainDep;
 
@@ -48,32 +81,19 @@ function buildDeps(pkg, exactFlag, peersFlag) {
 
   const peers = Object.keys(pkg.peerDependencies).map(buildDep(pkgPeers));
 
-  return filterAndJoin([mainDep, ...peers]);
+  return filterFalseyAndJoin([mainDep, ...peers]);
 }
 
 const buildDep = (obj) => (key) => quoteSpacesInDep([key, obj[key]].join('@'));
 
 function buildInstallCmd(client, isGlobal) {
-  const install = [client];
-  if (isGlobal && client === 'yarn') install.push('global');
-  install.push(client === 'yarn' ? 'add' : 'install');
-  return filterAndJoin(install);
+  return `${client}${isGlobal && ['yarn', 'bun'].includes(client) ? ' global' : ''} add`;
 }
 
 function buildCmdFlags(client, flags) {
-  let response = flags;
-
-  if (client === 'yarn') {
-    response = flags.map((flag) => {
-      if (Object.prototype.hasOwnProperty.call(npmFlagsToYarn, flag)) {
-        return npmFlagsToYarn[flag];
-      }
-
-      return flag;
-    });
-  }
-
-  return filterAndJoin(response);
+  return filterFalseyAndJoin(
+    flags.map((flag) => installMappings[flag]?.[client] ?? flag),
+  );
 }
 
 export default function INSTALLCMD({
@@ -95,11 +115,11 @@ export default function INSTALLCMD({
   const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
   const client = options.client || pickClient(path.dirname(pkgPath));
 
-  const deps = buildDeps(pkg, options.exact, options.peers !== 'false');
-  const installCmd = buildInstallCmd(client, options.flags.global);
-  const installFlags = buildCmdFlags(client, options.flags);
+  const cmd = filterFalseyAndJoin([
+    buildInstallCmd(client, options.flags.global),
+    buildCmdFlags(client, options.flags),
+    buildDeps(pkg, options.exact, options.peers !== 'false'),
+  ]);
 
-  const install = filterAndJoin([installCmd, installFlags, deps]);
-
-  return ['```sh', install, '```'].join('\n');
+  return `\`\`\`sh\n${cmd}\n\`\`\``;
 }

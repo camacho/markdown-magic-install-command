@@ -18,6 +18,19 @@ describe('markdown-magic-install-command', () => {
         options: { pkg: './__fixtures__/no-peer-deps/package.json' },
         srcPath,
       }),
-    ).toBe('```sh\nnpm install --save no-peer-deps-fixture\n```');
+    ).toBe('```sh\nnpm add --save no-peer-deps-fixture\n```');
+  });
+
+  it('detects a non-npm client from its lockfile and translates flags', () => {
+    expect(
+      INSTALLCMD({
+        content: 'untouched',
+        options: {
+          pkg: './__fixtures__/yarn-client/package.json',
+          flags: '["--save-dev"]',
+        },
+        srcPath,
+      }),
+    ).toBe('```sh\nyarn add --dev yarn-client-fixture\n```');
   });
 });
