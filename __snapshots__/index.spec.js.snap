@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`markdown-magic-install-command > builds an install command from the nearest package.json 1`] = `
+"\`\`\`sh
+npm add --save markdown-magic-install-command markdown-magic@^4
+\`\`\`"
+`;
